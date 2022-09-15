@@ -2,7 +2,10 @@ package myself.custom.asset;
 
 import com.google.gson.Gson;
 import myself.custom.asset.enums.RecordAction;
+import myself.custom.asset.model.Asset;
+import myself.custom.asset.model.StockRecord;
 import myself.custom.asset.model.domain.Stock;
+import myself.custom.asset.model.pk.CustomPk;
 import myself.custom.asset.repo.AssetRepo;
 import myself.custom.asset.repo.StockRecordRepo;
 import myself.custom.asset.service.AssetService;
@@ -10,7 +13,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import java.util.Map;
+
+import java.util.List;
 
 @SpringBootApplication
 public class AssetApplication {
@@ -54,20 +58,20 @@ public class AssetApplication {
 //            List<StockRecord> stockRecords = stockRecordRepo.findAll();
 //
 //            System.out.println(gson.toJson(assets));
-            System.out.println("before");
-            System.out.println(gson.toJson(assetService.getLatestAsset("line8")));
+//            System.out.println("before");
+//            System.out.println(gson.toJson(assetService.getLatestAsset("line8")));
 
-            Stock stock = new Stock();
-            stock.setCode("1314");
-            stock.setPrice(200);
-            stock.setQuantity(8);
-            Map<String, Object> result = assetService.operatingStock("line8", stock, RecordAction.BUY);
-
-            System.out.println("after");
-            System.out.println(gson.toJson(assetService.getLatestAsset("line8")));
-            System.out.println(gson.toJson(stockRecordRepo.findAll()));
-
-            System.out.println(gson.toJson(result));
+//            Stock stock = new Stock();
+//            stock.setCode("1314");
+//            stock.setPrice(200);
+//            stock.setQuantity(8);
+//            Map<String, Object> result = assetService.operatingStock("line8", stock, RecordAction.BUY);
+//
+//            System.out.println("after");
+//            System.out.println(gson.toJson(assetService.getLatestAsset("line8")));
+//            System.out.println(gson.toJson(stockRecordRepo.findAll()));
+//
+//            System.out.println(gson.toJson(result));
 
         };
     }
