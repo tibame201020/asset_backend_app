@@ -6,7 +6,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static myself.custom.asset.constant.Constant.CORS_URLS;
-import static myself.custom.asset.constant.Constant.FRONT_END_URL;
 
 @EnableWebMvc
 @Configuration
