@@ -47,4 +47,14 @@ public class CalcServiceImpl implements CalcService {
             return false;
         }
     }
+
+    @Override
+    public boolean updateCalcConfig(CalcConfig calcConfig) {
+        try {
+            calcConfigRepo.save(calcConfig);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

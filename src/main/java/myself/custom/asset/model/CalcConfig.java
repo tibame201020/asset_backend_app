@@ -19,6 +19,7 @@ public class CalcConfig implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String key;
+    private String purpose;
     private Double value;
     private String description;
 }

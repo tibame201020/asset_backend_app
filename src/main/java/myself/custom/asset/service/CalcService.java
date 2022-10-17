@@ -12,4 +12,6 @@ public interface CalcService {
     CalcConfig queryById(Long id);
 
     boolean deleteById(Long id);
+
+    boolean updateCalcConfig(CalcConfig calcConfig);
 }

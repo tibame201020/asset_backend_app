@@ -33,4 +33,9 @@ public class CalcController {
     public boolean deleteById(@RequestBody Long id) {
         return calcService.deleteById(id);
     }
+
+    @RequestMapping("/update")
+    public boolean updateCalcConfig(@RequestBody CalcConfig calcConfig) {
+        return calcService.updateCalcConfig(calcConfig);
+    }
 }
