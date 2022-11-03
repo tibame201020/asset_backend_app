@@ -23,19 +23,16 @@ public class CalendarController {
 
     @RequestMapping("/queryByMonth")
     public List<CalendarEvent> queryCalendarEventByMonth(@RequestBody int month) {
-        System.out.println(month);
         return calendarService.queryEventByMonth(month);
     }
 
     @RequestMapping("/queryByDateStr")
     public List<CalendarEvent> queryCalendarEventByDateStr(@RequestBody String dateStr) {
-        System.out.println(dateStr);
         return calendarService.queryEventByDateStr(dateStr);
     }
 
     @RequestMapping("/queryEventsByRange")
     public List<CalendarEvent> queryCalendarEventBetweenDate(@RequestBody CalendarEvent calendarEvent) {
-        System.out.println(calendarEvent);
         return calendarService.queryCalendarEventBetweenDate(calendarEvent.getStart(), calendarEvent.getEnd());
     }
 }

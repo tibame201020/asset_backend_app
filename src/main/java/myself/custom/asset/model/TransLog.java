@@ -15,13 +15,15 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
-public class Deposit implements Serializable {
+public class TransLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String type;
     private String category;
+    private Timestamp transDate;
+    private String name;
     private Double value;
-    private String action;
-    private Double deposit;
+    private String ps;
     private Timestamp logTime;
 }
