@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.Collator;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +49,14 @@ public class TransLogServiceImpl implements TransLogService {
                 return true;
             }
             return false;
-        }).collect(Collectors.toList());
+        }).sorted((o1, o2) -> {
+            String o1Name = o1.getName().contains("早")?"A" + o1.getName() : o1.getName().contains("中") ? "B" + o1.getName() :o1.getName();
+            String o2Name = o2.getName().contains("早")?"A" + o2.getName() : o2.getName().contains("中") ? "B" + o2.getName() :o2.getName();
+            return o1Name.compareTo(o2Name);
+        }).sorted(Comparator.comparing(TransLog::getCategory))
+                .sorted(Comparator.comparing(TransLog::getTransDate))
+                .sorted(Comparator.comparing(TransLog::getType))
+                .collect(Collectors.toList());
     }
 
     @Override
