@@ -17,7 +17,6 @@ public class CalendarController {
 
     @RequestMapping("/add")
     public boolean addCalendarEvent(@RequestBody CalendarEvent calendarEvent) {
-        System.out.println(calendarEvent);
         return calendarService.addEvent(calendarEvent);
     }
 
@@ -33,6 +32,13 @@ public class CalendarController {
 
     @RequestMapping("/queryEventsByRange")
     public List<CalendarEvent> queryCalendarEventBetweenDate(@RequestBody CalendarEvent calendarEvent) {
+        if (calendarEvent.getStart() == null) {
+            return null;
+        }
         return calendarService.queryCalendarEventBetweenDate(calendarEvent.getStart(), calendarEvent.getEnd());
+    }
+    @RequestMapping("/delete")
+    public boolean deleteTransLogById(@RequestBody long id) {
+        return calendarService.deleteEvent(id);
     }
 }

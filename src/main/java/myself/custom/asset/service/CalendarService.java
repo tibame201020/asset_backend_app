@@ -13,4 +13,6 @@ public interface CalendarService {
     List<CalendarEvent> queryEventByDateStr(String dateStr);
 
     List<CalendarEvent> queryCalendarEventBetweenDate(Timestamp start, Timestamp end);
+
+    boolean deleteEvent(Long id);
 }

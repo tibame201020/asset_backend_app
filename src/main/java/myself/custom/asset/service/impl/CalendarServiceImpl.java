@@ -43,4 +43,14 @@ public class CalendarServiceImpl implements CalendarService {
 
         return calendarEventRepo.findAllByStartBetweenOrderByStart(start, end);
     }
+
+    @Override
+    public boolean deleteEvent(Long id) {
+        try {
+            calendarEventRepo.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
