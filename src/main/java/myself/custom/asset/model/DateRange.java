@@ -14,4 +14,5 @@ public class DateRange implements Serializable {
     private Timestamp start;
     private Timestamp end;
     private String type;
+    private String keyword;
 }

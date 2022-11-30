@@ -37,6 +37,10 @@ public class TransLogServiceImpl implements TransLogService {
     public List<TransLog> queryTransLogBetweenDate(DateRange dateRange) {
         String type = dateRange.getType();
         List<TransLog> transLogList = transLogRepo.findByTransDateBetweenOrderByTransDate(dateRange.getStart(), dateRange.getEnd());
+        final String keyword= dateRange.getKeyword();
+        transLogList = (keyword == null || keyword.length() == 0)?
+                transLogList:
+                transLogList.stream().filter(transLog -> transLog.toString().contains(keyword)).collect(Collectors.toList());
 
         return transLogList.stream().filter(transLog -> {
             if (type.equals("expand") && transLog.getType().equals("支出")) {
