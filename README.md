@@ -28,6 +28,18 @@ The application uses an in-memory H2 database.
 - User: `user`
 - Password: `pwd`
 
+### Build & Run with Docker
+
+If you have Docker installed, you can build and run the application as a container:
+
+```bash
+# Build the image
+docker build -t asset-backend .
+
+# Run the container
+docker run -d -p 9889:9889 --name asset-backend asset-backend
+```
+
 ## Configuration
 Configuration is located in `src/main/resources/application.properties`.
 Virtual threads are enabled by default:
