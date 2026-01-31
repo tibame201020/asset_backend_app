@@ -29,6 +29,8 @@ public class SettingController {
     private myself.custom.asset.repo.MealLogRepository mealLogRepository;
     @Autowired
     private myself.custom.asset.repo.MealTypeRepository mealTypeRepository;
+    @Autowired
+    private myself.custom.asset.repo.AppSettingRepo appSettingRepo;
 
     @RequestMapping("/del")
     public boolean deleteAll(@RequestBody java.util.Map<String, String> payload) {
@@ -87,6 +89,7 @@ public class SettingController {
         backup.setExerciseTypes(exerciseTypeRepository.findAll());
         backup.setMealLogs(mealLogRepository.findAll());
         backup.setMealTypes(mealTypeRepository.findAll());
+        backup.setAppSettings(appSettingRepo.findAll());
         return backup;
     }
 
@@ -121,10 +124,31 @@ public class SettingController {
                 mealTypeRepository.deleteAll();
                 mealTypeRepository.saveAll(data.getMealTypes());
             }
+            if (data.getAppSettings() != null) {
+                appSettingRepo.deleteAll(); // Strategy: overwrite all settings on import? Or merge? Usually restore
+                                            // means replace.
+                appSettingRepo.saveAll(data.getAppSettings());
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @GetMapping("/app")
+    public java.util.Map<String, String> getAppSettings() {
+        java.util.List<myself.custom.asset.model.AppSetting> list = appSettingRepo.findAll();
+        java.util.Map<String, String> map = new java.util.HashMap<>();
+        for (myself.custom.asset.model.AppSetting s : list) {
+            map.put(s.getKeyName(), s.getValue());
+        }
+        return map;
+    }
+
+    @PostMapping("/app")
+    public myself.custom.asset.model.AppSetting saveAppSetting(
+            @RequestBody myself.custom.asset.model.AppSetting setting) {
+        return appSettingRepo.save(setting);
     }
 }

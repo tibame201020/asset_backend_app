@@ -18,4 +18,5 @@ public class BackupData implements Serializable {
     private List<ExerciseType> exerciseTypes;
     private List<MealLog> mealLogs;
     private List<MealType> mealTypes;
+    private List<AppSetting> appSettings;
 }
