@@ -1,0 +1,31 @@
+server:
+  port: 9889
+
+spring:
+  datasource:
+    platform: h2
+    url: jdbc:h2:./h2data/test;NON_KEYWORDS=VALUE,KEY,END,START,MONTH,DATE,NAME,CATEGORY
+    driverClassName: org.h2.Driver
+    username: user
+    password: pwd
+  h2:
+    console:
+      enabled: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  threads:
+    virtual:
+      enabled: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: info

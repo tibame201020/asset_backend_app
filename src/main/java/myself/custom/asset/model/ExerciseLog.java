@@ -15,6 +15,9 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
+@jakarta.persistence.Table(indexes = {
+        @jakarta.persistence.Index(name = "idx_exercise_log_date", columnList = "transDate")
+})
 public class ExerciseLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

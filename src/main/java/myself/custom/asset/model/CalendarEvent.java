@@ -15,6 +15,11 @@ import java.sql.Timestamp;
 @Setter
 @Getter
 @ToString
+@jakarta.persistence.Table(indexes = {
+        @jakarta.persistence.Index(name = "idx_calendar_month", columnList = "month"),
+        @jakarta.persistence.Index(name = "idx_calendar_datestr", columnList = "dateStr"),
+        @jakarta.persistence.Index(name = "idx_calendar_start", columnList = "start")
+})
 public class CalendarEvent implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
