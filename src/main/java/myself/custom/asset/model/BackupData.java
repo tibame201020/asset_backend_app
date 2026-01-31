@@ -14,4 +14,8 @@ public class BackupData implements Serializable {
     private List<CalcConfig> calcConfigs;
     private List<CalendarEvent> calendarEvents;
     private List<TransLog> transLogs;
+    private List<ExerciseLog> exerciseLogs;
+    private List<ExerciseType> exerciseTypes;
+    private List<MealLog> mealLogs;
+    private List<MealType> mealTypes;
 }
