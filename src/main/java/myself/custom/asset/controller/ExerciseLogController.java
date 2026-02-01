@@ -4,9 +4,7 @@ import myself.custom.asset.model.DateRange;
 import myself.custom.asset.model.ExerciseLog;
 import myself.custom.asset.service.ExerciseLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,18 +15,18 @@ public class ExerciseLogController {
     @Autowired
     private ExerciseLogService exerciseLogService;
 
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public boolean saveExerciseLog(@RequestBody ExerciseLog exerciseLog) {
         return exerciseLogService.saveExerciseLog(exerciseLog);
     }
 
-    @RequestMapping("/queryByDateRange")
+    @PostMapping("/queryByDateRange")
     public List<ExerciseLog> queryByDateRange(@RequestBody DateRange dateRange) {
         return exerciseLogService.queryExerciseLogBetweenDate(dateRange);
     }
 
-    @RequestMapping("/delete")
-    public boolean deleteExerciseLogById(@RequestBody long id) {
+    @DeleteMapping("/delete/{id}")
+    public boolean deleteExerciseLogById(@PathVariable long id) {
         return exerciseLogService.deleteExerciseLogById(id);
     }
 }

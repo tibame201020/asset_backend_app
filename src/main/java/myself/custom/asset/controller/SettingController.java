@@ -32,7 +32,7 @@ public class SettingController {
     @Autowired
     private myself.custom.asset.repo.AppSettingRepo appSettingRepo;
 
-    @RequestMapping("/del")
+    @PostMapping("/del")
     public boolean deleteAll(@RequestBody java.util.Map<String, String> payload) {
         String target = payload.get("target");
         System.out.println("Delete All Request for target: [" + target + "]");
