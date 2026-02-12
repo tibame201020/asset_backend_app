@@ -1,6 +1,5 @@
 package myself.custom.asset.service.impl;
 
-
 import myself.custom.asset.model.DateRange;
 import myself.custom.asset.model.TransLog;
 import myself.custom.asset.repo.TransLogRepo;
@@ -21,7 +20,6 @@ public class TransLogServiceImpl implements TransLogService {
     @Autowired
     private TransLogRepo transLogRepo;
 
-
     @Override
     public boolean saveTransLog(TransLog transLog) {
         try {
@@ -36,11 +34,12 @@ public class TransLogServiceImpl implements TransLogService {
     @Override
     public List<TransLog> queryTransLogBetweenDate(DateRange dateRange) {
         String type = dateRange.getType();
-        List<TransLog> transLogList = transLogRepo.findByTransDateBetweenOrderByTransDate(dateRange.getStart(), dateRange.getEnd());
-        final String keyword= dateRange.getKeyword();
-        transLogList = (keyword == null || keyword.length() == 0)?
-                transLogList:
-                transLogList.stream().filter(transLog -> transLog.toString().contains(keyword)).collect(Collectors.toList());
+        List<TransLog> transLogList = transLogRepo.findByTransDateBetweenOrderByTransDate(dateRange.getStart(),
+                dateRange.getEnd());
+        final String keyword = dateRange.getKeyword();
+        transLogList = (keyword == null || keyword.length() == 0) ? transLogList
+                : transLogList.stream().filter(transLog -> transLog.toString().contains(keyword))
+                        .collect(Collectors.toList());
 
         return transLogList.stream().filter(transLog -> {
             if (type.equals("expand") && transLog.getType().equals("支出")) {
@@ -53,13 +52,17 @@ public class TransLogServiceImpl implements TransLogService {
                 return true;
             }
             return false;
-        }).sorted((o1, o2) -> {
-            String o1Name = o1.getName().contains("早")?"A" + o1.getName() : o1.getName().contains("中") ? "B" + o1.getName() :o1.getName();
-            String o2Name = o2.getName().contains("早")?"A" + o2.getName() : o2.getName().contains("中") ? "B" + o2.getName() :o2.getName();
-            return o1Name.compareTo(o2Name);
-        }).sorted(Comparator.comparing(TransLog::getCategory))
-                .sorted(Comparator.comparing(TransLog::getTransDate))
-                .sorted(Comparator.comparing(TransLog::getType))
+        }).sorted(
+                Comparator.comparing(TransLog::getTransDate).reversed()
+                        .thenComparing(TransLog::getType)
+                        .thenComparing(TransLog::getCategory)
+                        .thenComparing((o1, o2) -> {
+                            String o1Name = o1.getName().contains("早") ? "A" + o1.getName()
+                                    : o1.getName().contains("中") ? "B" + o1.getName() : o1.getName();
+                            String o2Name = o2.getName().contains("早") ? "A" + o2.getName()
+                                    : o2.getName().contains("中") ? "B" + o2.getName() : o2.getName();
+                            return o1Name.compareTo(o2Name);
+                        }))
                 .collect(Collectors.toList());
     }
 
