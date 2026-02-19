@@ -1,5 +1,6 @@
 package myself.custom.asset.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,12 +15,22 @@ import java.io.Serializable;
 @Setter
 @Getter
 @ToString
+@Schema(description = "試算配置")
 public class CalcConfig implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "主鍵 ID (自動產生)", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
+    @Schema(description = "配置鍵名", example = "rate")
     private String key;
+
+    @Schema(description = "用途說明", example = "匯率")
     private String purpose;
+
+    @Schema(description = "配置數值", example = "31.5")
     private Double value;
+
+    @Schema(description = "備註描述", example = "美元兌台幣匯率")
     private String description;
 }

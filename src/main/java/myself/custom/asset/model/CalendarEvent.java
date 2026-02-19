@@ -1,5 +1,6 @@
 package myself.custom.asset.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,16 +21,34 @@ import java.sql.Timestamp;
         @jakarta.persistence.Index(name = "idx_calendar_datestr", columnList = "dateStr"),
         @jakarta.persistence.Index(name = "idx_calendar_start", columnList = "start")
 })
+@Schema(description = "行事曆事件")
 public class CalendarEvent implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "主鍵 ID (自動產生)", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
+    @Schema(description = "事件標題", example = "團隊會議")
     private String title;
+
+    @Schema(description = "開始時間")
     private Timestamp start;
+
+    @Schema(description = "開始時間文字", example = "2026-02-19 10:00")
     private String startText;
+
+    @Schema(description = "結束時間")
     private Timestamp end;
+
+    @Schema(description = "結束時間文字", example = "2026-02-19 11:00")
     private String endText;
+
+    @Schema(description = "月份 (1-12)", example = "2")
     private int month;
+
+    @Schema(description = "日期字串", example = "2026-02-19")
     private String dateStr;
+
+    @Schema(description = "紀錄時間")
     private Timestamp logTime;
 }

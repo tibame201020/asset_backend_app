@@ -1,5 +1,6 @@
 package myself.custom.asset.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,14 +19,28 @@ import java.sql.Timestamp;
 @jakarta.persistence.Table(indexes = {
         @jakarta.persistence.Index(name = "idx_exercise_log_date", columnList = "transDate")
 })
+@Schema(description = "運動紀錄")
 public class ExerciseLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "主鍵 ID (自動產生)", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
+    @Schema(description = "運動名稱", example = "跑步")
     private String exerciseName;
-    private Double duration; // minutes
+
+    @Schema(description = "運動時長 (分鐘)", example = "30.0")
+    private Double duration;
+
+    @Schema(description = "消耗卡路里", example = "250.0")
     private Double calories;
+
+    @Schema(description = "運動日期")
     private Timestamp transDate;
+
+    @Schema(description = "備註", example = "在公園跑步")
     private String ps;
+
+    @Schema(description = "紀錄時間")
     private Timestamp logTime;
 }

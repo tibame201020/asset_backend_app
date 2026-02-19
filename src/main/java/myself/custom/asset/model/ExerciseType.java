@@ -1,5 +1,6 @@
 package myself.custom.asset.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,12 +15,22 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
+@Schema(description = "運動類型定義")
 public class ExerciseType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "主鍵 ID (自動產生)", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
+    @Schema(description = "運動名稱", example = "跑步")
     private String name;
+
+    @Schema(description = "圖示 (Emoji)", example = "🏃")
     private String icon;
-    private Double defaultDuration; // minutes
-    private Double kcalPerHour; // Calories burned per hour
+
+    @Schema(description = "預設時長 (分鐘)", example = "30.0")
+    private Double defaultDuration;
+
+    @Schema(description = "每小時消耗卡路里", example = "500.0")
+    private Double kcalPerHour;
 }
