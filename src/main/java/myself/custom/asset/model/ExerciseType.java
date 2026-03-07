@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity
@@ -22,6 +23,7 @@ public class ExerciseType implements Serializable {
     @Schema(description = "主鍵 ID (自動產生)", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
+    @NotBlank(message = "運動名稱不能為空")
     @Schema(description = "運動名稱", example = "跑步")
     private String name;
 

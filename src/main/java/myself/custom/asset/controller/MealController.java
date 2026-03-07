@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import myself.custom.asset.model.MealLog;
 import myself.custom.asset.model.MealType;
 import myself.custom.asset.service.MealService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class MealController {
     @Operation(summary = "儲存飲食紀錄", description = "新增或更新一筆飲食紀錄")
     @ApiResponse(responseCode = "200", description = "回傳儲存後的飲食紀錄物件")
     @PostMapping("/log")
-    public MealLog saveLog(@RequestBody MealLog log) {
+    public MealLog saveLog(@RequestBody @Valid MealLog log) {
         return mealService.saveLog(log);
     }
 
@@ -62,7 +63,7 @@ public class MealController {
     @Operation(summary = "儲存飲食類型", description = "新增或更新一筆飲食類型定義")
     @ApiResponse(responseCode = "200", description = "回傳儲存後的飲食類型物件")
     @PostMapping("/type")
-    public MealType saveType(@RequestBody MealType type) {
+    public MealType saveType(@RequestBody @Valid MealType type) {
         return mealService.saveType(type);
     }
 

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import myself.custom.asset.model.DateRange;
 import myself.custom.asset.model.ExerciseLog;
 import myself.custom.asset.service.ExerciseLogService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +24,14 @@ public class ExerciseLogController {
     @Operation(summary = "儲存運動紀錄", description = "新增或更新一筆運動紀錄")
     @ApiResponse(responseCode = "200", description = "儲存成功回傳 true，失敗回傳 false")
     @PostMapping("/save")
-    public boolean saveExerciseLog(@RequestBody ExerciseLog exerciseLog) {
+    public boolean saveExerciseLog(@RequestBody @Valid ExerciseLog exerciseLog) {
         return exerciseLogService.saveExerciseLog(exerciseLog);
     }
 
     @Operation(summary = "依日期區間查詢運動紀錄", description = "根據起訖日期查詢區間內的運動紀錄")
     @ApiResponse(responseCode = "200", description = "回傳運動紀錄列表")
     @PostMapping("/queryByDateRange")
-    public List<ExerciseLog> queryByDateRange(@RequestBody DateRange dateRange) {
+    public List<ExerciseLog> queryByDateRange(@RequestBody @Valid DateRange dateRange) {
         return exerciseLogService.queryExerciseLogBetweenDate(dateRange);
     }
 

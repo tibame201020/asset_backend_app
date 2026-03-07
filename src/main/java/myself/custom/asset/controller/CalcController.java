@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import myself.custom.asset.model.CalcConfig;
 import myself.custom.asset.service.CalcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class CalcController {
     @Operation(summary = "批次新增試算配置", description = "一次新增多筆試算配置資料")
     @ApiResponse(responseCode = "200", description = "新增成功回傳 true，失敗回傳 false")
     @PostMapping("/insert")
-    public boolean save(@RequestBody CalcConfig[] calcConfigs) {
+    public boolean save(@RequestBody @Valid CalcConfig[] calcConfigs) {
         return calcService.save(calcConfigs);
     }
 
@@ -50,7 +51,7 @@ public class CalcController {
     @Operation(summary = "更新試算配置", description = "更新已存在的試算配置資料")
     @ApiResponse(responseCode = "200", description = "更新成功回傳 true，失敗回傳 false")
     @PutMapping("/update")
-    public boolean updateCalcConfig(@RequestBody CalcConfig calcConfig) {
+    public boolean updateCalcConfig(@RequestBody @Valid CalcConfig calcConfig) {
         return calcService.updateCalcConfig(calcConfig);
     }
 

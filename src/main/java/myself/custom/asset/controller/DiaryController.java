@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import myself.custom.asset.model.DiaryLog;
 import myself.custom.asset.service.DiaryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class DiaryController {
     @Operation(summary = "儲存日記", description = "新增或更新一筆日記紀錄")
     @ApiResponse(responseCode = "200", description = "回傳儲存後的日記物件（含自動產生的 ID）")
     @PostMapping("/log")
-    public DiaryLog saveLog(@RequestBody DiaryLog log) {
+    public DiaryLog saveLog(@RequestBody @Valid DiaryLog log) {
         return diaryService.saveLog(log);
     }
 

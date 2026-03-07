@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import myself.custom.asset.model.ExerciseType;
 import myself.custom.asset.service.ExerciseTypeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class ExerciseTypeController {
     @Operation(summary = "儲存運動類型", description = "新增或更新一筆運動類型定義")
     @ApiResponse(responseCode = "200", description = "回傳儲存後的運動類型物件")
     @PostMapping("/save")
-    public ExerciseType save(@RequestBody ExerciseType type) {
+    public ExerciseType save(@RequestBody @Valid ExerciseType type) {
         return exerciseTypeService.save(type);
     }
 

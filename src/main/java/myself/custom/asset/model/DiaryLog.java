@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -26,13 +28,16 @@ public class DiaryLog implements Serializable {
     @Schema(description = "主鍵 ID (自動產生)", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
+    @NotBlank(message = "日記標題不能為空")
     @Schema(description = "日記標題", example = "今天的心得")
     private String title;
 
+    @NotBlank(message = "日記內容不能為空")
     @jakarta.persistence.Column(columnDefinition = "TEXT")
     @Schema(description = "日記內容 (大型文字)", example = "今天天氣很好...")
     private String content;
 
+    @NotNull(message = "日記日期不能為空")
     @Schema(description = "日記日期")
     private Timestamp transDate;
 

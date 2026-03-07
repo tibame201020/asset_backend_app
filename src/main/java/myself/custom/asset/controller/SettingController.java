@@ -7,6 +7,7 @@ import myself.custom.asset.model.BackupData;
 import myself.custom.asset.repo.CalcConfigRepo;
 import myself.custom.asset.repo.CalendarEventRepo;
 import myself.custom.asset.repo.TransLogRepo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -161,7 +162,7 @@ public class SettingController {
     @ApiResponse(responseCode = "200", description = "回傳儲存後的設定物件")
     @PostMapping("/app")
     public myself.custom.asset.model.AppSetting saveAppSetting(
-            @RequestBody myself.custom.asset.model.AppSetting setting) {
+            @RequestBody @Valid myself.custom.asset.model.AppSetting setting) {
         return appSettingRepo.save(setting);
     }
 }

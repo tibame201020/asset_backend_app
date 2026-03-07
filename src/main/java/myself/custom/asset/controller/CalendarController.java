@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import myself.custom.asset.model.CalendarEvent;
 import myself.custom.asset.service.CalendarService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class CalendarController {
     @Operation(summary = "新增行事曆事件", description = "新增一筆行事曆事件")
     @ApiResponse(responseCode = "200", description = "新增成功回傳 true，失敗回傳 false")
     @PostMapping("/add")
-    public boolean addCalendarEvent(@RequestBody CalendarEvent calendarEvent) {
+    public boolean addCalendarEvent(@RequestBody @Valid CalendarEvent calendarEvent) {
         return calendarService.addEvent(calendarEvent);
     }
 
