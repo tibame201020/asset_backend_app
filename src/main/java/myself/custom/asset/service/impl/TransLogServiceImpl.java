@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,14 +19,9 @@ public class TransLogServiceImpl implements TransLogService {
     private TransLogRepo transLogRepo;
 
     @Override
-    public boolean saveTransLog(TransLog transLog) {
-        try {
-            transLog.setLogTime(new Timestamp(System.currentTimeMillis()));
-            transLogRepo.save(transLog);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public TransLog saveTransLog(TransLog transLog) {
+        transLog.setLogTime(new Timestamp(System.currentTimeMillis()));
+        return transLogRepo.save(transLog);
     }
 
     @Override
@@ -37,21 +30,18 @@ public class TransLogServiceImpl implements TransLogService {
         List<TransLog> transLogList = transLogRepo.findByTransDateBetweenOrderByTransDate(dateRange.getStart(),
                 dateRange.getEnd());
         final String keyword = dateRange.getKeyword();
-        transLogList = (keyword == null || keyword.length() == 0) ? transLogList
+        transLogList = (keyword == null || keyword.isEmpty()) ? transLogList
                 : transLogList.stream().filter(transLog -> transLog.toString().contains(keyword))
                         .collect(Collectors.toList());
 
         return transLogList.stream().filter(transLog -> {
+            if (type == null || type.equals("all")) {
+                return true;
+            }
             if (type.equals("expand") && transLog.getType().equals("支出")) {
                 return true;
             }
-            if (type.equals("income") && transLog.getType().equals("收入")) {
-                return true;
-            }
-            if (type.equals("all")) {
-                return true;
-            }
-            return false;
+            return type.equals("income") && transLog.getType().equals("收入");
         }).sorted(
                 Comparator.comparing(TransLog::getTransDate).reversed()
                         .thenComparing(TransLog::getType)
@@ -68,11 +58,7 @@ public class TransLogServiceImpl implements TransLogService {
 
     @Override
     public boolean deleteTransLogById(long id) {
-        try {
-            transLogRepo.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        transLogRepo.deleteById(id);
+        return true;
     }
 }

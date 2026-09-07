@@ -22,9 +22,9 @@ public class ExerciseLogController {
     private ExerciseLogService exerciseLogService;
 
     @Operation(summary = "儲存運動紀錄", description = "新增或更新一筆運動紀錄")
-    @ApiResponse(responseCode = "200", description = "儲存成功回傳 true，失敗回傳 false")
+    @ApiResponse(responseCode = "200", description = "回傳儲存後的運動紀錄物件（含 ID）")
     @PostMapping("/save")
-    public boolean saveExerciseLog(@RequestBody @Valid ExerciseLog exerciseLog) {
+    public ExerciseLog saveExerciseLog(@RequestBody @Valid ExerciseLog exerciseLog) {
         return exerciseLogService.saveExerciseLog(exerciseLog);
     }
 

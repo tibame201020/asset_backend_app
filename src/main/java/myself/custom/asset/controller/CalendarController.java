@@ -20,10 +20,19 @@ public class CalendarController {
     private CalendarService calendarService;
 
     @Operation(summary = "新增行事曆事件", description = "新增一筆行事曆事件")
-    @ApiResponse(responseCode = "200", description = "新增成功回傳 true，失敗回傳 false")
+    @ApiResponse(responseCode = "200", description = "回傳新增後的行事曆事件物件（含 ID）")
     @PostMapping("/add")
-    public boolean addCalendarEvent(@RequestBody @Valid CalendarEvent calendarEvent) {
+    public CalendarEvent addCalendarEvent(@RequestBody @Valid CalendarEvent calendarEvent) {
         return calendarService.addEvent(calendarEvent);
+    }
+
+    @Operation(summary = "更新行事曆事件", description = "依 ID 更新既有行事曆事件")
+    @ApiResponse(responseCode = "200", description = "回傳更新後的行事曆事件物件")
+    @PutMapping("/update/{id}")
+    public CalendarEvent updateCalendarEvent(
+            @Parameter(description = "行事曆事件 ID", required = true, example = "1") @PathVariable Long id,
+            @RequestBody @Valid CalendarEvent calendarEvent) {
+        return calendarService.updateEvent(id, calendarEvent);
     }
 
     @Operation(summary = "依月份查詢事件", description = "根據月份數字 (1-12) 查詢行事曆事件")
@@ -53,7 +62,7 @@ public class CalendarController {
     @Operation(summary = "刪除行事曆事件", description = "根據 ID 刪除指定的行事曆事件")
     @ApiResponse(responseCode = "200", description = "刪除成功回傳 true，失敗回傳 false")
     @DeleteMapping("/delete/{id}")
-    public boolean deleteTransLogById(
+    public boolean deleteCalendarEventById(
             @Parameter(description = "行事曆事件 ID", required = true, example = "1") @PathVariable long id) {
         return calendarService.deleteEvent(id);
     }

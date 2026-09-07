@@ -22,9 +22,9 @@ public class TransLogController {
     private TransLogService transLogService;
 
     @Operation(summary = "儲存交易紀錄", description = "新增或更新一筆收支交易紀錄")
-    @ApiResponse(responseCode = "200", description = "儲存成功回傳 true，失敗回傳 false")
+    @ApiResponse(responseCode = "200", description = "回傳儲存後的交易紀錄物件（含 ID）")
     @PostMapping("/save")
-    public boolean saveTransLog(@RequestBody @Valid TransLog transLog) {
+    public TransLog saveTransLog(@RequestBody @Valid TransLog transLog) {
         return transLogService.saveTransLog(transLog);
     }
 

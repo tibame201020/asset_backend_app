@@ -32,6 +32,9 @@ public class MealLog implements Serializable {
     @Schema(description = "餐點名稱", example = "雞排便當")
     private String mealName;
 
+    @Schema(description = "飲食類型 ID；選填，保留 mealName 以相容舊資料", example = "2")
+    private Long mealTypeId;
+
     @Schema(description = "卡路里", example = "650.0")
     private Double calories;
 
