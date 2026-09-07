@@ -6,7 +6,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface CalendarService {
-    boolean addEvent(CalendarEvent calendarEvent);
+    CalendarEvent addEvent(CalendarEvent calendarEvent);
+
+    CalendarEvent updateEvent(Long id, CalendarEvent calendarEvent);
 
     List<CalendarEvent> queryEventByMonth(int month);
 

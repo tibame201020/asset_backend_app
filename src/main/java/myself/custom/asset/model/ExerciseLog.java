@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -30,9 +29,12 @@ public class ExerciseLog implements Serializable {
     @Schema(description = "主鍵 ID (自動產生)", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
-    @NotBlank(message = "運動名稱不為能空")
+    @NotBlank(message = "運動名稱不能為空")
     @Schema(description = "運動名稱", example = "跑步")
     private String exerciseName;
+
+    @Schema(description = "運動類型 ID；選填，保留 exerciseName 以相容舊資料", example = "1")
+    private Long exerciseTypeId;
 
     @NotNull(message = "運動時長不能為空")
     @PositiveOrZero(message = "運動時長不能為負數")

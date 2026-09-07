@@ -15,14 +15,19 @@ public class CalendarServiceImpl implements CalendarService {
     private CalendarEventRepo calendarEventRepo;
 
     @Override
-    public boolean addEvent(CalendarEvent calendarEvent) {
+    public CalendarEvent addEvent(CalendarEvent calendarEvent) {
+        return calendarEventRepo.save(calendarEvent);
+    }
 
-        try {
-            calendarEventRepo.save(calendarEvent);
-            return true;
-        } catch (Exception e) {
-            return false;
+    @Override
+    public CalendarEvent updateEvent(Long id, CalendarEvent calendarEvent) {
+        CalendarEvent existing = calendarEventRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Calendar event not found: " + id));
+        calendarEvent.setId(existing.getId());
+        if (calendarEvent.getLogTime() == null) {
+            calendarEvent.setLogTime(existing.getLogTime());
         }
+        return calendarEventRepo.save(calendarEvent);
     }
 
     @Override
@@ -40,17 +45,12 @@ public class CalendarServiceImpl implements CalendarService {
         if (start.equals(end)) {
             end = new Timestamp(end.getTime() + 24 * 60 * 60 * 1000);
         }
-
         return calendarEventRepo.findAllByStartBetweenOrderByStart(start, end);
     }
 
     @Override
     public boolean deleteEvent(Long id) {
-        try {
-            calendarEventRepo.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        calendarEventRepo.deleteById(id);
+        return true;
     }
 }

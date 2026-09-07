@@ -50,7 +50,6 @@ public class MealService {
         return type;
     }
 
-    // Meal Log Methods
     public List<MealLog> getAllLogs() {
         return mealLogRepository.findAll();
     }
@@ -60,6 +59,13 @@ public class MealService {
     }
 
     public MealLog saveLog(MealLog log) {
+        if (log.getMealTypeId() != null) {
+            MealType type = mealTypeRepository.findById(log.getMealTypeId())
+                    .orElseThrow(() -> new IllegalArgumentException("Meal type not found: " + log.getMealTypeId()));
+            if (log.getCalories() == null) {
+                log.setCalories(type.getDefaultCalories());
+            }
+        }
         if (log.getLogTime() == null) {
             log.setLogTime(new Timestamp(System.currentTimeMillis()));
         }
@@ -70,7 +76,6 @@ public class MealService {
         mealLogRepository.deleteById(id);
     }
 
-    // Meal Type Methods
     public List<MealType> getAllTypes() {
         return mealTypeRepository.findAll();
     }
