@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -22,7 +21,7 @@ import java.sql.Timestamp;
 @jakarta.persistence.Table(indexes = {
         @jakarta.persistence.Index(name = "idx_trans_log_date", columnList = "transDate")
 })
-@Schema(description = "交易紀錄 (收支)")
+@Schema(description = "交易紀錄 (收支)。category 是前端分析維度，必須使用固定 taxonomy。")
 public class TransLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,11 +29,11 @@ public class TransLog implements Serializable {
     private Long id;
 
     @NotBlank(message = "交易類型不能為空")
-    @Schema(description = "交易類型 (收入/支出)", example = "支出")
+    @Schema(description = "交易類型，只允許 收入/支出", example = "支出")
     private String type;
 
     @NotBlank(message = "分類不能為空")
-    @Schema(description = "分類", example = "飲食")
+    @Schema(description = "分析分類。支出：食/衣/住/行/育/樂/其他；收入：薪資/投資/其他", example = "食")
     private String category;
 
     @NotNull(message = "交易日期不能為空")
@@ -42,14 +41,14 @@ public class TransLog implements Serializable {
     private Timestamp transDate;
 
     @NotBlank(message = "項目名稱不能為空")
-    @Schema(description = "項目名稱", example = "午餐")
+    @Schema(description = "具體項目名稱，作為 category 下的第二層分析維度", example = "牛肉麵")
     private String name;
 
     @NotNull(message = "金額不能為空")
-    @Schema(description = "金額", example = "120.0")
+    @Schema(description = "金額，以正數儲存；收入/支出由 type 區分", example = "180.0")
     private Double value;
 
-    @Schema(description = "備註", example = "團購便當")
+    @Schema(description = "更細節的描述，作為第三層 drill-down", example = "午餐")
     private String ps;
 
     @Schema(description = "紀錄時間")

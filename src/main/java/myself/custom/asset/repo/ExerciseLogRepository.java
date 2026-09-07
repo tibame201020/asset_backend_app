@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ExerciseLogRepository extends JpaRepository<ExerciseLog, Long> {
     List<ExerciseLog> findAllByTransDateBetweenOrderByTransDateDesc(Timestamp start, Timestamp end);
+    boolean existsByExerciseTypeId(Long exerciseTypeId);
 }

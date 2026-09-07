@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface MealLogRepository extends JpaRepository<MealLog, Long> {
     List<MealLog> findByTransDateBetweenOrderByTransDateDesc(Timestamp start, Timestamp end);
+    boolean existsByMealTypeId(Long mealTypeId);
 }
