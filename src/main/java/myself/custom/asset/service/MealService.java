@@ -13,10 +13,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
 public class MealService {
+
+    private static final Set<String> CANONICAL_MEAL_TYPES = Set.of(
+            "早餐", "午餐", "晚餐", "消夜", "零食", "飲料", "其他");
 
     @Autowired
     private MealLogRepository mealLogRepository;
@@ -26,27 +30,44 @@ public class MealService {
 
     @PostConstruct
     public void seedDefaults() {
-        if (mealTypeRepository.count() == 0) {
-            log.info("Seeding default meal types...");
-            List<MealType> defaults = new ArrayList<>();
+        List<MealType> existing = mealTypeRepository.findAll();
+        boolean canonical = existing.size() == CANONICAL_MEAL_TYPES.size()
+                && existing.stream().map(MealType::getName).collect(java.util.stream.Collectors.toSet())
+                        .equals(CANONICAL_MEAL_TYPES);
 
-            defaults.add(createType("Rice", "🍚", 200.0));
-            defaults.add(createType("Noodles", "🍜", 400.0));
-            defaults.add(createType("Bread", "🍞", 150.0));
-            defaults.add(createType("Salad", "🥗", 100.0));
-            defaults.add(createType("Meat", "🥩", 300.0));
-            defaults.add(createType("Coffee", "☕", 50.0));
-            defaults.add(createType("Fruit", "🍎", 80.0));
-
-            mealTypeRepository.saveAll(defaults);
+        if (canonical) {
+            return;
         }
+
+        // Safe migration from the old food-category taxonomy. Only replace it when
+        // there are no meal logs that could reference the existing IDs.
+        if (!existing.isEmpty() && mealLogRepository.count() > 0) {
+            log.warn("Meal types use a legacy taxonomy but meal logs exist; preserving types to avoid breaking references.");
+            return;
+        }
+
+        if (!existing.isEmpty()) {
+            log.info("Replacing legacy meal type taxonomy with meal-period taxonomy...");
+            mealTypeRepository.deleteAll();
+        } else {
+            log.info("Seeding default meal period types...");
+        }
+
+        List<MealType> defaults = new ArrayList<>();
+        defaults.add(createType("早餐", "🍳"));
+        defaults.add(createType("午餐", "🍱"));
+        defaults.add(createType("晚餐", "🍽️"));
+        defaults.add(createType("消夜", "🌙"));
+        defaults.add(createType("零食", "🍪"));
+        defaults.add(createType("飲料", "🥤"));
+        defaults.add(createType("其他", "🍴"));
+        mealTypeRepository.saveAll(defaults);
     }
 
-    private MealType createType(String name, String icon, Double defaultCalories) {
+    private MealType createType(String name, String icon) {
         MealType type = new MealType();
         type.setName(name);
         type.setIcon(icon);
-        type.setDefaultCalories(defaultCalories);
         return type;
     }
 
@@ -59,12 +80,8 @@ public class MealService {
     }
 
     public MealLog saveLog(MealLog log) {
-        if (log.getMealTypeId() != null) {
-            MealType type = mealTypeRepository.findById(log.getMealTypeId())
-                    .orElseThrow(() -> new IllegalArgumentException("Meal type not found: " + log.getMealTypeId()));
-            if (log.getCalories() == null) {
-                log.setCalories(type.getDefaultCalories());
-            }
+        if (log.getMealTypeId() != null && !mealTypeRepository.existsById(log.getMealTypeId())) {
+            throw new IllegalArgumentException("Meal type not found: " + log.getMealTypeId());
         }
         if (log.getLogTime() == null) {
             log.setLogTime(new Timestamp(System.currentTimeMillis()));
@@ -85,6 +102,9 @@ public class MealService {
     }
 
     public void deleteType(Long id) {
+        if (mealLogRepository.existsByMealTypeId(id)) {
+            throw new IllegalArgumentException("Meal type is still referenced by meal logs: " + id);
+        }
         mealTypeRepository.deleteById(id);
     }
 

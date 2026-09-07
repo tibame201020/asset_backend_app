@@ -3,6 +3,7 @@ package myself.custom.asset.service;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import myself.custom.asset.model.ExerciseType;
+import myself.custom.asset.repo.ExerciseLogRepository;
 import myself.custom.asset.repo.ExerciseTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +19,21 @@ public class ExerciseTypeService {
     @Autowired
     private ExerciseTypeRepository exerciseTypeRepository;
 
+    @Autowired
+    private ExerciseLogRepository exerciseLogRepository;
+
     @PostConstruct
     public void seedDefaults() {
         if (exerciseTypeRepository.count() == 0) {
             log.info("Seeding default exercise types...");
             List<ExerciseType> defaults = new ArrayList<>();
-
-            // Calculated as MET * 70kg
-            defaults.add(createType("Jogging", "🏃", 30.0, 595.0)); // 8.5 * 70
-            defaults.add(createType("Cycling", "🚴", 45.0, 525.0)); // 7.5 * 70
-            defaults.add(createType("Walking", "🚶", 30.0, 245.0)); // 3.5 * 70
-            defaults.add(createType("Fitness", "💪", 60.0, 350.0)); // 5.0 * 70
-            defaults.add(createType("Yoga", "🧘", 60.0, 175.0)); // 2.5 * 70
-            defaults.add(createType("Swimming", "🏊", 30.0, 490.0)); // 7.0 * 70
-            defaults.add(createType("Basketball", "🏀", 60.0, 560.0)); // 8.0 * 70
-
+            defaults.add(createType("Jogging", "🏃", 30.0, 595.0));
+            defaults.add(createType("Cycling", "🚴", 45.0, 525.0));
+            defaults.add(createType("Walking", "🚶", 30.0, 245.0));
+            defaults.add(createType("Fitness", "💪", 60.0, 350.0));
+            defaults.add(createType("Yoga", "🧘", 60.0, 175.0));
+            defaults.add(createType("Swimming", "🏊", 30.0, 490.0));
+            defaults.add(createType("Basketball", "🏀", 60.0, 560.0));
             exerciseTypeRepository.saveAll(defaults);
         }
     }
@@ -55,6 +56,9 @@ public class ExerciseTypeService {
     }
 
     public void delete(Long id) {
+        if (exerciseLogRepository.existsByExerciseTypeId(id)) {
+            throw new IllegalArgumentException("Exercise type is still referenced by exercise logs: " + id);
+        }
         exerciseTypeRepository.deleteById(id);
     }
 

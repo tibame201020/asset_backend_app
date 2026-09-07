@@ -10,18 +10,41 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class TransLogServiceImpl implements TransLogService {
+
+    private static final Set<String> EXPENSE_CATEGORIES = Set.of("食", "衣", "住", "行", "育", "樂", "其他");
+    private static final Set<String> INCOME_CATEGORIES = Set.of("薪資", "投資", "其他");
 
     @Autowired
     private TransLogRepo transLogRepo;
 
     @Override
     public TransLog saveTransLog(TransLog transLog) {
+        validateTaxonomy(transLog);
+        if (transLog.getValue() < 0) {
+            throw new IllegalArgumentException("Transaction value must be non-negative; use type to distinguish income/expense.");
+        }
         transLog.setLogTime(new Timestamp(System.currentTimeMillis()));
         return transLogRepo.save(transLog);
+    }
+
+    private void validateTaxonomy(TransLog transLog) {
+        Set<String> allowed;
+        if ("支出".equals(transLog.getType())) {
+            allowed = EXPENSE_CATEGORIES;
+        } else if ("收入".equals(transLog.getType())) {
+            allowed = INCOME_CATEGORIES;
+        } else {
+            throw new IllegalArgumentException("Transaction type must be 收入 or 支出.");
+        }
+        if (!allowed.contains(transLog.getCategory())) {
+            throw new IllegalArgumentException(
+                    "Invalid category for " + transLog.getType() + ": " + transLog.getCategory() + ". Allowed: " + allowed);
+        }
     }
 
     @Override
@@ -35,24 +58,14 @@ public class TransLogServiceImpl implements TransLogService {
                         .collect(Collectors.toList());
 
         return transLogList.stream().filter(transLog -> {
-            if (type == null || type.equals("all")) {
-                return true;
-            }
-            if (type.equals("expand") && transLog.getType().equals("支出")) {
-                return true;
-            }
-            return type.equals("income") && transLog.getType().equals("收入");
+            if ("expand".equals(type) && "支出".equals(transLog.getType())) return true;
+            if ("income".equals(type) && "收入".equals(transLog.getType())) return true;
+            return "all".equals(type);
         }).sorted(
                 Comparator.comparing(TransLog::getTransDate).reversed()
                         .thenComparing(TransLog::getType)
                         .thenComparing(TransLog::getCategory)
-                        .thenComparing((o1, o2) -> {
-                            String o1Name = o1.getName().contains("早") ? "A" + o1.getName()
-                                    : o1.getName().contains("中") ? "B" + o1.getName() : o1.getName();
-                            String o2Name = o2.getName().contains("早") ? "A" + o2.getName()
-                                    : o2.getName().contains("中") ? "B" + o2.getName() : o2.getName();
-                            return o1Name.compareTo(o2Name);
-                        }))
+                        .thenComparing(TransLog::getName))
                 .collect(Collectors.toList());
     }
 

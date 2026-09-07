@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 @jakarta.persistence.Table(indexes = {
         @jakarta.persistence.Index(name = "idx_exercise_log_date", columnList = "transDate")
 })
-@Schema(description = "運動紀錄")
+@Schema(description = "運動紀錄。exerciseTypeId 是固定分析維度，exerciseName 是該次運動的具體名稱。")
 public class ExerciseLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,10 +30,10 @@ public class ExerciseLog implements Serializable {
     private Long id;
 
     @NotBlank(message = "運動名稱不能為空")
-    @Schema(description = "運動名稱", example = "跑步")
+    @Schema(description = "具體運動名稱，作為 ExerciseType 下的第二層 drill-down", example = "戶外慢跑")
     private String exerciseName;
 
-    @Schema(description = "運動類型 ID；選填，保留 exerciseName 以相容舊資料", example = "1")
+    @Schema(description = "運動類型 ID；固定的 primary analytics dimension", example = "1")
     private Long exerciseTypeId;
 
     @NotNull(message = "運動時長不能為空")
@@ -41,14 +41,14 @@ public class ExerciseLog implements Serializable {
     @Schema(description = "運動時長 (分鐘)", example = "30.0")
     private Double duration;
 
-    @Schema(description = "消耗卡路里", example = "250.0")
+    @Schema(description = "消耗卡路里；未提供時可依 ExerciseType.kcalPerHour 自動計算", example = "250.0")
     private Double calories;
 
     @NotNull(message = "運動日期不能為空")
     @Schema(description = "運動日期")
     private Timestamp transDate;
 
-    @Schema(description = "備註", example = "在公園跑步")
+    @Schema(description = "更細節的備註，作為第三層 drill-down", example = "河堤，輕鬆配速")
     private String ps;
 
     @Schema(description = "紀錄時間")
